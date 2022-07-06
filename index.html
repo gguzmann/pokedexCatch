@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokedex</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+            let listaPokemones = new Array(120).fill(false)
+            let cantidadCatch = () => {
+                let contar = listaPokemones.filter(x => x == true);
+
+                    $('#numCatch').text(contar.length)
+                
+            };
+
+            cantidadCatch()
+            for (let i = 1; i < 120; i++) {
+                $('#listaPokemones').append('<div class="formatoPoke">' + '<img class="poke ' + (listaPokemones[i] ? '' : 'sombra') + '" value="' + i + '" id="' + i + '" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + i + '.png" alt = "bulbasaur" >' + '<h6>#' + i + '</h6>' + '</div>')
+            }
+
+
+            $('.poke').click(function () {
+                let almacenarValor = $(this).attr('value');
+                let thiss = $(this)
+
+                $.get('https://pokeapi.co/api/v2/pokemon/' + almacenarValor + '/', function (respuesta) {
+                    let nombre = respuesta.name;
+                    if (listaPokemones[almacenarValor]) {
+                        console.log(respuesta)
+                        let tipo1 = respuesta.types[0].type.name;
+                        // let tipo2 = respuesta.types[1].type.name ? 'noone' : respuesta.types[1].type.name;
+                        let tipos = respuesta.types;
+                        let imagen = respuesta.sprites.front_default;
+                        $('#infoPokemon').html('<img class="pokebola" src="' + imagen + '"" alt="' + nombre + '">' + '<h1>Nombre: </h1>' + '<h2>' + nombre + '</h2>' + '<h1>Tipo: </h1>' + '<h2>' + tipo1 + '</h2>');
+
+                    } else {
+                        $('#infoPokemon').html('<img class="pokebola" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png" alt="">');
+                        let pregunta = prompt('Que pokemos es ?')
+                        if (pregunta == nombre) {
+                            listaPokemones[almacenarValor] = true;
+                            cantidadCatch()
+                            thiss.toggleClass('sombra');
+
+                            let tipo1 = respuesta.types[0].type.name;
+                            let tipos = respuesta.types;
+                            let imagen = respuesta.sprites.front_default;
+                            $('#infoPokemon').html('<img class="pokebola" src="' + imagen + '"" alt="' + nombre + '">' + '<h1>Nombre: </h1>' + '<h2>' + nombre + '</h2>' + '<h1>Tipo: </h1>' + '<h2>' + tipo1 + '</h2>');
+                        }
+                    }
+                }), 'json';
+                console.log(cantidadCatch(listaPokemones));
+            });
+        });
+    </script>
+    <style>
+        body {
+            background-color: crimson;
+            overflow: hidden;
+        }
+
+        #infoPokemon {
+            height: 500px;
+            background-color: brown;
+            display: flex;
+            align-content: center;
+            justify-content: center;
+            border: 3px solid black;
+            margin: 0 20px;
+            text-align: center;
+            font-size: 2px
+        }
+
+        h1 {
+            color: white;
+            font-size: 24px;
+            text-decoration: underline;
+        }
+
+        h6 {
+            color: white;
+        }
+
+        #listaPokemones {
+            overflow-y: scroll;
+            height: 100vh;
+            margin: 20px;
+            padding: 10px;
+        }
+
+        .poke {
+            /* border: 3px solid black; */
+            margin: 2px;
+            vertical-align: middle;
+            width: 100px;
+        }
+
+        .sombra {
+            -webkit-filter: brightness(0)
+        }
+
+        .pokebola {
+            object-fit: cover;
+            width: 200px;
+            height: 200px;
+            background-color: white;
+            border: solid 10px;
+            border-top-color: red;
+            border-bottom-color: red;
+            border-left-color: black;
+            border-right-color: black;
+            border-radius: 200px;
+        }
+
+        .titulo {
+            display: flex;
+            justify-content: center;
+            border-bottom: 3px solid black;
+        }
+
+        .icon-pokebola {
+            width: 20px;
+        }
+
+        .formatoPoke {
+            max-width: 200px;
+            max-height: 200px;
+            margin: 3px;
+            padding: 3px;
+            display: inline-block;
+            border: 3px solid black;
+            background-color: brown;
+        }
+
+        .formatoPoke:hover {
+            background-color: rgba(228, 203, 203, 0.2);
+        }
+
+        .pokeball {
+            display: flex;
+            margin-left: 500px;
+            justify-content: center;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="titulo">
+        <div>
+            <img class="p-3"
+                src="https://archives.bulbagarden.net/media/upload/thumb/4/4b/Pok%C3%A9dex_logo.png/250px-Pok%C3%A9dex_logo.png"
+                alt="">
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-8">
+            <div class="m-3 pokeball">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Pok%C3%A9_Ball_icon.svg/512px-Pok%C3%A9_Ball_icon.svg.png"
+                    width="50" height="50" alt="" srcset="">
+                <h3 class="ms-2 mt-2 text-white">X</h3>
+                <h3 class="ms-2 mt-2 text-white" id="numCatch">0</h3>
+            </div>
+            <div id="listaPokemones"></div>
+        </div>
+        <div id="infoPokemon" class="col row mt-3">
+        </div>
+    </div>
+</body>
+
+</html>
