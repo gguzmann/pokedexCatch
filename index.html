@@ -12,12 +12,16 @@
         integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
     <script>
         $(document).ready(function () {
-            let listaPokemones = new Array(120).fill(false)
+            localStorage.setItem('test', JSON.stringify([1,2,3]))
+            let asda = JSON.parse(localStorage.getItem('test'))
+            console.log(asda[0])
+            let listaPokemones = localStorage.getItem('listPoke') != null ? JSON.parse(localStorage.getItem('listPoke')) : new Array(120).fill(false)
+            console.log(listaPokemones)
             let cantidadCatch = () => {
                 let contar = listaPokemones.filter(x => x == true);
 
-                    $('#numCatch').text(contar.length)
-                
+                $('#numCatch').text(contar.length)
+
             };
 
             cantidadCatch()
@@ -47,7 +51,7 @@
                             listaPokemones[almacenarValor] = true;
                             cantidadCatch()
                             thiss.toggleClass('sombra');
-
+                            localStorage.setItem('listPoke', JSON.stringify(listaPokemones))
                             let tipo1 = respuesta.types[0].type.name;
                             let tipos = respuesta.types;
                             let imagen = respuesta.sprites.front_default;
