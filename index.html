@@ -10,9 +10,11 @@
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.6.0.js"
         integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"
+        integrity="sha256-eTyxS0rkjpLEo16uXTS0uVCS4815lc40K2iVpWDvdSY=" crossorigin="anonymous"></script>
     <script>
         $(document).ready(function () {
-            localStorage.setItem('test', JSON.stringify([1,2,3]))
+            localStorage.setItem('test', JSON.stringify([1, 2, 3]))
             let asda = JSON.parse(localStorage.getItem('test'))
             console.log(asda[0])
             let listaPokemones = localStorage.getItem('listPoke') != null ? JSON.parse(localStorage.getItem('listPoke')) : new Array(120).fill(false)
@@ -34,6 +36,9 @@
                 let almacenarValor = $(this).attr('value');
                 let thiss = $(this)
 
+                $('#modal').modal('toggle')
+
+
                 $.get('https://pokeapi.co/api/v2/pokemon/' + almacenarValor + '/', function (respuesta) {
                     let nombre = respuesta.name;
                     if (listaPokemones[almacenarValor]) {
@@ -43,9 +48,8 @@
                         let tipos = respuesta.types;
                         let imagen = respuesta.sprites.front_default;
                         $('#infoPokemon').html('<img class="pokebola" src="' + imagen + '"" alt="' + nombre + '">' + '<h1>Nombre: </h1>' + '<h2>' + nombre + '</h2>' + '<h1>Tipo: </h1>' + '<h2>' + tipo1 + '</h2>');
-
                     } else {
-                        $('#infoPokemon').html('<img class="pokebola" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png" alt="">');
+                        $('#infoPokemon').html('<img class="pokebola sombra" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + almacenarValor + '.png" alt="">');
                         let pregunta = prompt('Que pokemos es ?')
                         if (pregunta == nombre) {
                             listaPokemones[almacenarValor] = true;
@@ -65,7 +69,7 @@
     </script>
     <style>
         body {
-            background-color: crimson;
+            /* background-color: crimson; */
             overflow: hidden;
         }
 
@@ -73,7 +77,8 @@
             height: 500px;
             background-color: brown;
             display: flex;
-            align-content: center;
+            /* align-content: center; */
+            padding-top: 20px;
             justify-content: center;
             border: 3px solid black;
             margin: 0 20px;
@@ -93,9 +98,9 @@
 
         #listaPokemones {
             overflow-y: scroll;
-            height: 100vh;
-            margin: 20px;
             padding: 10px;
+            margin: 20px;
+            height: 50%;
         }
 
         .poke {
@@ -105,9 +110,7 @@
             width: 100px;
         }
 
-        .sombra {
-            -webkit-filter: brightness(0)
-        }
+
 
         .pokebola {
             object-fit: cover;
@@ -122,9 +125,16 @@
             border-radius: 200px;
         }
 
+        .sombra {
+            background-color: rgba(255, 0, 0, 0);
+            -webkit-filter: brightness(0);
+            border: 0px;
+        }
+
         .titulo {
             display: flex;
             justify-content: center;
+            background-color: crimson;
             border-bottom: 3px solid black;
         }
 
@@ -133,8 +143,8 @@
         }
 
         .formatoPoke {
-            max-width: 200px;
-            max-height: 200px;
+            max-width: 400px;
+            max-height: 400px;
             margin: 3px;
             padding: 3px;
             display: inline-block;
@@ -143,7 +153,7 @@
         }
 
         .formatoPoke:hover {
-            background-color: rgba(228, 203, 203, 0.2);
+            background-color: rgba(255, 0, 0, 0.6);
         }
 
         .pokeball {
@@ -163,20 +173,59 @@
                 alt="">
         </div>
     </div>
+    <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal">
+        Launch demo modal -->
+    </button>
+    <div class="row  bg-white">
 
-    <div class="row mt-5">
-        <div class="col-8">
+        <div class="col-12 ">
             <div class="m-3 pokeball">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Pok%C3%A9_Ball_icon.svg/512px-Pok%C3%A9_Ball_icon.svg.png"
                     width="50" height="50" alt="" srcset="">
-                <h3 class="ms-2 mt-2 text-white">X</h3>
-                <h3 class="ms-2 mt-2 text-white" id="numCatch">0</h3>
+                <h3 class="ms-2 mt-2">X</h3>
+                <h3 class="ms-2 mt-2" id="numCatch">0</h3>
             </div>
-            <div id="listaPokemones"></div>
-        </div>
-        <div id="infoPokemon" class="col row mt-3">
+
+            <div id="listaPokemones" class="pb-5"></div>
         </div>
     </div>
+
+
+    <!-- Button trigger modal -->
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <!-- <div class="modal-content"> -->
+            <!-- <div class="modal-header"> -->
+            <!-- </div> -->
+            <!-- <div class="modal-body"> -->
+            <div id="infoPokemon" class="row">
+                <p>Modal title</p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+
+            <!-- </div> -->
+            <!-- <div class="modal-footer"> -->
+            <!-- </div> -->
+        </div>
+        <!-- </div> -->
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
 </body>
 
 </html>
