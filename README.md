@@ -1,2 +1,1 @@
-
-https://nicneira.github.io/PokedexG2/
+https://gguzmann.github.io/pokedexCatch/
